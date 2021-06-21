@@ -45,6 +45,7 @@ Route::middleware(['auth:api'])->prefix('v1')->group(function () {
         Route::apiResource('category','CategoryController');
         Route::apiResource('sub-category','SubCategoryController');
         Route::apiResource('unit','UnitController');
+        Route::apiResource('supplier','SupplierController');
     });
     //Admin Routes
     Route::middleware(['checkRole:super,admin'])->group(function () {
