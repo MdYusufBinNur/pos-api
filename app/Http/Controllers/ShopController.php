@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 
 class ShopController extends Controller
 {
@@ -46,7 +47,7 @@ class ShopController extends Controller
         $user->role = Helper::ROLE_SHOP;
         $user->password = bcrypt($request->password);
         if ($request->hasFile('image')) {
-            $image = Helper::save_file($request->image, 'user');
+            $image = Helper::save_file($request->image, 'shop');
             $user->image = $image;
         }
         if ($user->save()) {
@@ -56,7 +57,7 @@ class ShopController extends Controller
                 'status' => $request->status ? $request->status : 'pending'
             ]);
             $userId = $user->id;
-            $data = Shop::with('user')->where('user_id','=', $user->id)->first();
+            $data = Shop::with('user')->where('user_id', '=', $user->id)->first();
             return Helper::success_response_with_data(new ShopResource($data));
         }
         return Helper::error_response();
@@ -70,19 +71,9 @@ class ShopController extends Controller
      */
     public function show(Shop $shop)
     {
-        return Helper::success_response_with_data(new ShopResource($shop));
+        return Helper::success_response_with_data(new ShopResource($shop->load('user')));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -98,20 +89,20 @@ class ShopController extends Controller
             'mobile' => "nullable|unique:Users,mobile",
             'image' => 'nullable|image|max:1999'
         ]);
-        $user = User::query()->where('id','=', $shop->user_id)->first();
-        $user->mobile = $request->mobile;
+        $user = User::query()->where('id', '=', $shop->user_id)->first();
+        $user->mobile = $request->mobile ? $request->mobile : $user->mobile;
         $user->name = $request->name ? $request->name : $user->name;
         $user->role = $request->role ? $request->role : $user->role;
         if ($request->hasFile('image')) {
-            $image = Helper::save_file($request->image, 'user');
+            $image = Helper::save_file($request->image, 'shop');
             $user->image = $image;
+            File::delete($shop->image);
         }
 
-
-        $shop->address = $request->address;
-        $shop->status = $request->status;
-        $shop->description = $request->description;
-        if ($user->update() && $shop->update()) {
+        $shop->address = $request->address ? $request->address : $shop->address;
+        $shop->status = $request->status ? $request->status : $shop->status;
+        $shop->description = $request->description ? $request->description : $shop->description;
+        if ($user->save() && $shop->save()) {
             $data = $shop->load('user');
             return Helper::success_response_with_data(new ShopResource($data));
         }
@@ -121,11 +112,27 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return Response
+     * @param Shop $shop
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Shop $shop)
     {
-        //
+        File::delete($shop->image);
+        if ($shop->delete()) {
+            return \response()->json(
+                [
+                    'error' => false,
+                    'message' => 'Deleted'
+                ]
+            );
+        }
+
+        return \response()->json(
+            [
+                'error' => true,
+                'message' => 'Something went wrong'
+            ]
+        );
+
     }
 }

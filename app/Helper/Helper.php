@@ -69,4 +69,15 @@ class Helper
 
         return $imageUrl;
     }
+
+    public static function response_with_data($data, $error)
+    {
+        return response()->json(
+            [
+                'error' => $error,
+                'message' => $error == true ? 'Something went wrong' : 'Success',
+                'data' => $error == true ? [] : $data
+            ]
+        );
+    }
 }

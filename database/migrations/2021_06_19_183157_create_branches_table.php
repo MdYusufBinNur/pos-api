@@ -20,6 +20,7 @@ class CreateBranchesTable extends Migration
             $table->string('address');
             $table->string('mobile');
             $table->string('details')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
 
 

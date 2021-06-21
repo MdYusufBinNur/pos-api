@@ -20,6 +20,7 @@ class CreateBrandsTable extends Migration
             $table->string('origin')->nullable();
             $table->boolean('isActive')->default(true);
             $table->string('details')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
 
             $table->foreign('shop_id')
