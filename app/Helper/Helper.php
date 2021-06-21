@@ -4,6 +4,8 @@
 namespace App\Helper;
 
 
+use http\Env\Request;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
@@ -80,4 +82,6 @@ class Helper
             ]
         );
     }
+
+
 }
