@@ -16,7 +16,6 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->string('name');
@@ -25,7 +24,6 @@ class CreateProductsTable extends Migration
             $table->string('image');
             $table->boolean('isActive')->default(true);
             $table->boolean('featured')->nullable();
-            $table->double('discount')->default(0);
             $table->timestamps();
 
             $table->foreign('brand_id')
@@ -33,10 +31,6 @@ class CreateProductsTable extends Migration
                 ->on('brands')
                 ->onDelete('cascade');
 
-            $table->foreign('unit_id')
-                ->references('id')
-                ->on('units')
-                ->onDelete('cascade');
 
             $table->foreign('sub_category_id')
                 ->references('id')
