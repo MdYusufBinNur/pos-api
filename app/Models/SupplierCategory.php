@@ -11,6 +11,8 @@ class SupplierCategory extends Model
 
     protected $guarded = [];
 
+    protected $table = 'supplier_category';
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class,'supplier_id','id');
