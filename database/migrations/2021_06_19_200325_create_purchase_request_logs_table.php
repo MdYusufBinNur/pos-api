@@ -19,7 +19,9 @@ class CreatePurchaseRequestLogsTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->double('quantity');
             $table->unsignedBigInteger('unit_id');
-            $table->double('cost')->nullable();
+            $table->double('per_unit_cost')->nullable();
+            $table->string('details')->nullable();
+            $table->double('total_cost')->nullable();
             $table->boolean('isActive')->default(true);
             $table->string('status')->nullable();
             $table->timestamps();

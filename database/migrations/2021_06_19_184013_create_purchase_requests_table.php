@@ -18,7 +18,7 @@ class CreatePurchaseRequestsTable extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->double('total_cost')->nullable();
             $table->string('status')->default('pending');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(true);
             $table->timestamps();
 
             $table->foreign('supplier_id')

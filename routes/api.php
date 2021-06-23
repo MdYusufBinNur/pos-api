@@ -48,6 +48,7 @@ Route::middleware(['auth:api'])->prefix('v1')->group(function () {
         Route::apiResource('supplier','SupplierController');
         Route::apiResource('supplier_category','SupplierCategoryController');
         Route::apiResource('customer','CustomerController');
+        Route::apiResource('purchase-request','PurchaseRequestController');
     });
     //Admin Routes
     Route::middleware(['checkRole:super,admin'])->group(function () {
