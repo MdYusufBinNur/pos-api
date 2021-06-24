@@ -16,5 +16,9 @@ class Branch extends Model
         return $this->belongsTo(Shop::class);
     }
 
+    public function sale()
+    {
+        return $this->hasMany(ProductSale::class);
+    }
 
 }
