@@ -16,4 +16,5 @@ class Branch extends Model
         return $this->belongsTo(Shop::class);
     }
 
+
 }

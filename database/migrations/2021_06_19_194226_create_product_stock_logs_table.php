@@ -22,7 +22,7 @@ class CreateProductStockLogsTable extends Migration
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->string('sku')->nullable();
-            $table->double('per_unit_price')->nullable();
+            $table->double('per_unit_price');
             $table->double('quantity');
             $table->double('cost');
             $table->string('reason')->nullable();

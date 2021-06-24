@@ -16,14 +16,18 @@ class CreatePurchaseRequestsTable extends Migration
         Schema::create('purchase_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('branch_id');
             $table->double('total_cost')->nullable();
             $table->string('status')->default('pending');
             $table->boolean('isActive')->default(true);
             $table->timestamps();
-
             $table->foreign('supplier_id')
                 ->references('id')
                 ->on('suppliers')
+                ->onDelete('cascade');
+            $table->foreign('branch_id')
+                ->references('id')
+                ->on('branches')
                 ->onDelete('cascade');
         });
     }
