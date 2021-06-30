@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Supplier::class);
     }
+
+    public function branch()
+    {
+        return $this->hasOne(UserBranch::class);
+    }
 }

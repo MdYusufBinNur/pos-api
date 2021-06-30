@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceCollection;
 use App\Models\User;
+use App\Models\UserBranch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -182,4 +183,30 @@ class AdminController extends Controller
 
     }
 
+
+    public function assignBranchToAnUser(Request $request)
+    {
+        $request->validate(
+            [
+                'user_id' => 'required|exists:users,id',
+                'branch_id' => 'required|exists:branches,id',
+            ]
+        );
+
+        $check = UserBranch::query()
+            ->where('user_id', '=', $request->user_id)
+            ->where('branch_id', '=', $request->branch_id)
+            ->first();
+        if ($check) {
+            return Helper::response_with_data($check->load('user','branch'), false);
+        }
+        $assign = new UserBranch();
+        $assign->user_id = $request->user_id;
+        $assign->branch_id = $request->branch_id;
+
+        if ($assign->save()) {
+            return Helper::response_with_data($assign->load('user', 'branch'), false);
+        }
+        return Helper::response_with_data(null, true);
+    }
 }

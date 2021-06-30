@@ -104,7 +104,10 @@ class ProductSaleController extends Controller
                         ->where('product_id','=', $productSaleLog->product_id)
                         ->where('branch_id','=', $productSale->branch_id)
                         ->first();
-                    $stock['available_quantity'] = $productStockChange->available_quantity -  $productSaleLog->quantity;
+                    $qty =  $productStockChange->available_quantity -  $productSaleLog->quantity;
+
+                    $stock['available_quantity'] = $qty > 0 ? $qty : 0;
+
                     $productStockChange->update($stock);
                 }
             }
@@ -167,5 +170,26 @@ class ProductSaleController extends Controller
             return $this->generateInvoice();
         }
         return $invoice;
+    }
+
+
+    public function onlineDelivery()
+    {
+        $data = ProductSale::with('product_sale_log','product_sale_log.product','customer.user')
+            ->where('branch_id','=', auth()->user()->branch->branch_id)
+            ->where('delivery_method','=','online')
+            ->get();
+
+        return Helper::response_with_data($data, false);
+    }
+
+    public function regularDelivery()
+    {
+        $data = ProductSale::with('product_sale_log','product_sale_log.product','customer.user')
+            ->where('branch_id','=', auth()->user()->branch->branch_id)
+            ->where('delivery_method','=','regular')
+            ->get();
+
+        return Helper::response_with_data($data, false);
     }
 }

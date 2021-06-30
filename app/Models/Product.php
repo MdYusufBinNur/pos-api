@@ -34,8 +34,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductStockLog::class);
     }
+    public function product_sale_log()
+    {
+        return $this->hasMany(ProductSaleLog::class);
+    }
 
-    public function purchase_request_lo()
+    public function purchase_request_log()
     {
         return $this->hasMany(PurchaseRequestLog::class);
     }

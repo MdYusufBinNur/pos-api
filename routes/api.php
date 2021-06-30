@@ -25,10 +25,12 @@ Route::get('/',function () {
 });
 Route::prefix('v1')->namespace('Api\v1')->group(function () {
     Route::post('login','AdminController@login');
+    Route::post('register','AdminController@register');
 });
 Route::middleware(['auth:api'])->prefix('v1')->namespace('Api\v1')->group(function () {
     Route::middleware(['checkRole:super'])->group(function () {
         Route::get('users', 'AdminController@index');
+        Route::post('assign-branch', 'AdminController@assignBranchToAnUser');
     });
     //Admin Routes
     Route::middleware(['checkRole:super,admin'])->group(function () {
@@ -41,6 +43,11 @@ Route::middleware(['auth:api'])->prefix('v1')->group(function () {
         Route::apiResource('shop','ShopController');
         Route::apiResource('brand','BrandController');
         Route::apiResource('branch','BranchController');
+
+      //  Route::apiResource('sale','ProductSaleController');
+    });
+    //Admin Routes
+    Route::middleware(['checkRole:super,admin'])->group(function () {
         Route::apiResource('product','ProductController');
         Route::apiResource('category','CategoryController');
         Route::apiResource('sub-category','SubCategoryController');
@@ -50,15 +57,15 @@ Route::middleware(['auth:api'])->prefix('v1')->group(function () {
         Route::apiResource('customer','CustomerController');
         Route::apiResource('purchase-request','PurchaseRequestController');
         Route::apiResource('product-stock','ProductStockController');
-        Route::apiResource('sale','ProductSaleController');
-    });
-    //Admin Routes
-    Route::middleware(['checkRole:super,admin'])->group(function () {
-
     });
     //Seller Routes
-    Route::middleware(['checkRole:super,seller'])->group(function () {
+    Route::middleware(['checkRole:super,seller,admin'])->group(function () {
         //Write routes
+        Route::get('online-delivery', 'ProductSaleController@onlineDelivery');
+        Route::get('regular-delivery', 'ProductSaleController@regularDelivery');
+        Route::apiResource('sale','ProductSaleController');
+        Route::apiResource('expense','ExpenseController');
+        Route::post('expense-list','ExpenseController@expenseList');
     });
 
     //Customers Routes
