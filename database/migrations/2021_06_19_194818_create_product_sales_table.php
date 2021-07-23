@@ -27,11 +27,6 @@ class CreateProductSalesTable extends Migration
             $table->string('delivery_method')->default('regular'); // Could be online delivery
             $table->timestamps();
 
-
-            $table->foreign('branch_id')
-                ->references('id')
-                ->on('branches')
-                ->onDelete('cascade');
         });
     }
 
