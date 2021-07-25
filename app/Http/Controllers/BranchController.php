@@ -20,7 +20,7 @@ class BranchController extends Controller
      */
     public function index()
     {
-        return new BranchResourceCollection(Branch::all());
+        return new BranchResourceCollection(Branch::with('shop')->get());
     }
 
 
