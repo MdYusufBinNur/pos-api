@@ -47,7 +47,11 @@ class ProductController extends Controller
             $request['image'] = $image;
         }
 
+        $product_code = $this->generateProductCode();
+        $request['product_code'] = $product_code;
+
         $data = collect($request);
+
         if ($request->hasFile('file')) {
             $data->forget('file');
         };
@@ -98,10 +102,12 @@ class ProductController extends Controller
             $request['image'] = $image;
         }
 
+
         $data = collect($request);
         if ($request->hasFile('file')) {
             $data->forget('file');
         };
+
 
         if ($product->update($data->toArray()))
         {
@@ -127,5 +133,15 @@ class ProductController extends Controller
         }
 
         return Helper::response_with_data(null, true);
+    }
+
+    private function generateProductCode()
+    {
+        $code = 'HNST'.rand(00000,99999);
+        $check = Product::query()->where('product_code','=', $code)->first();
+        if ($check){
+            return $this->generateProductCode();
+        }
+        return $code;
     }
 }

@@ -43,7 +43,7 @@ class PurchaseRequestController extends Controller
         );
         $purchaseRequest = new PurchaseRequest();
         $purchaseRequest->supplier_id = $request->supplier_id;
-        $purchaseRequest->isActive = $request->isActive;
+        $purchaseRequest->isActive = true;
         $purchaseRequest->branch_id = $request->branch_id;
 
         if ($purchaseRequest->save()) {
@@ -54,7 +54,7 @@ class PurchaseRequestController extends Controller
                 $requestLog->unit_id = $request->unit_id[0];
                 $requestLog->quantity = $request->quantity[0];
                 $requestLog->details = $request->details;
-                $requestLog->isActive = $request->isAvtive;
+                $requestLog->isActive = $purchaseRequest->isAvtive;
                 $requestLog->save();
             }
 
